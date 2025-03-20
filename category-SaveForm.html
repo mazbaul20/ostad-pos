@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" />
+    <!--For Development Env--->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="./Assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.3.4/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue3-easy-data-table"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue3-easy-data-table/dist/style.css">
+</head>
+<body>
+    <div>
+        <nav id="topNav" class="navbar fixed-top bg-success top-navbar">
+            <div class="container-fluid">
+                <a id="MenuBar" @click="NavOpenClose" class="icon-nav mx-0 my-1 h5">
+                    <i class="fa text-white fa-bars"></i>
+                </a>
+            </div>
+        </nav>
+        <div id="sideNav" class="side-nav-open">
+            <div class="side-nav-top text-center">
+                <img alt="" class="side-nav-logo" src="./Assets/img/logo.svg" />
+            </div>
+
+            <a href="#" class="side-bar-item">
+                <span class="side-bar-item-icon"><i class="fa fa-tachometer-alt text-green"></i></span>
+                <span class="side-bar-item-caption">Dashboard</span>
+            </a>
+
+            <a href="#" class="side-bar-item">
+                <span class="side-bar-item-icon"><i class="fa fa-th-list text-green"></i></span>
+                <span class="side-bar-item-caption">Category</span>
+            </a>
+
+
+            <a href="#" class="side-bar-item">
+                <span class="side-bar-item-icon"><i class="fa fa-sign-out-alt text-green"></i></span>
+                <span class="side-bar-item-caption">Logout</span>
+            </a>
+
+        </div>
+        <div id="content" class="content">
+            <div class="container-fluid">
+                <main>
+                    <!-- start content -->
+                    <div class="container-fluid">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="float-end">
+                                            <a href="/CategoryPage" class="btn btn-success mx-3 btn-sm">
+                                               Back
+                                            </a>
+                                        </div>
+                                        <form>
+                                            <div class="card-body">
+                                                <h4>Save Category</h4>
+                                                <input id="id" name="id" v-model="form.id"  placeholder="Category ID" class="form-control" type="text"/>
+                                                <br/>
+                                                <input id="name" name="name" v-model="form.name"  placeholder="Category Name" class="form-control" type="text"/>
+                                                <br/>
+                                                <button type="submit"  class="btn w-100 btn-success">Save Change</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end content -->
+                </main>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</body>
+</html>
