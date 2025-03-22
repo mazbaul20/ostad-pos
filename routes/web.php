@@ -1,5 +1,6 @@
 <?php
 
+use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Middleware\SessionAuthenticate;
 use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\TokenVerificationMiddleware;
 
@@ -15,7 +17,6 @@ use App\Http\Middleware\TokenVerificationMiddleware;
 // });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/test', [HomeController::class, 'Test']);
 
 //User all routes
 Route::post('/user-registration', [UserController::class, 'UserRegistration'])->name('user.registration');
@@ -25,7 +26,7 @@ Route::post('/verify-otp', [UserController::class, 'VerifyOTP'])->name('VerifyOT
 
 
 
-Route::middleware(TokenVerificationMiddleware::class)->group(function(){
+Route::middleware(SessionAuthenticate::class)->group(function(){
     //reset password
     Route::post('/reset-password', [UserController::class, 'ResetPassword']);
 
@@ -38,6 +39,8 @@ Route::middleware(TokenVerificationMiddleware::class)->group(function(){
     Route::post('/category-by-id', [CategoryController::class, 'CategoryById']);
     Route::post('/update-category', [CategoryController::class, 'CategoryUpdate'])->name('category.update');
     Route::get('/delete-category/{id}', [CategoryController::class, 'CategoryDelete'])->name('category.delete');
+    Route::get('/CategoryPage', [CategoryController::class, 'CategoryPage'])->name('CategoryPage');
+    Route::get('/CategorySavePage', [CategoryController::class, 'CategorySavePage'])->name('CategorySavePage');
 
     //Product all routes
     Route::post('/create-product', [ProductController::class, 'CreateProduct'])->name('CreateProduct');
@@ -61,4 +64,13 @@ Route::middleware(TokenVerificationMiddleware::class)->group(function(){
 
     //Dashboard Summary
     Route::get('/dashboard-summary', [DashboardController::class, 'DashboardSummary'])->name('DashboardSummary');
+
+    //Resetpassword page
+    Route::get('/reset-password',[UserController::class, 'ResetPasswordPage']);
 });
+
+//Pages all routes
+Route::get('/login',[UserController::class, 'LoginPage'])->name('login.page');
+Route::get('/registration',[UserController::class, 'RegistrationPage'])->name('registration.page');
+Route::get('/send-otp',[UserController::class, 'SendOTPPage'])->name('sendotp.page');
+Route::get('/verify-otp',[UserController::class, 'VerifyOTPPage'])->name('VerifyOTPPage');

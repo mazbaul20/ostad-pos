@@ -11,8 +11,5 @@ class HomeController extends Controller
     {
         return Inertia::render('HomePage');
     }
-    public function Test()
-    {
-        return Inertia::render('TestPage');
-    }
+
 }
