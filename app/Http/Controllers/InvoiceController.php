@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use Inertia\Inertia;
 use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\Customer;
@@ -72,6 +73,13 @@ class InvoiceController extends Controller
             ]);
         }
     }//end method
+
+    public function InvoiceListPage(Request $request){
+        $user_id = request()->header('id');
+        $list = Invoice::where('user_id', $user_id)
+            ->with('customer','invoiceProduct.product')->get();
+        return Inertia::render('InvoiceListPage', ['list' => $list]);
+    }
 
     public function InvoiceList(){
         $user_id = request()->header('id');

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use Inertia\Inertia;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -40,10 +42,27 @@ class ProductController extends Controller
 
         Product::create($data);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Product created successfully'
-        ]);
+        // return response()->json([
+        //     'status' => 'success',
+        //     'message' => 'Product created successfully'
+        // ]);
+        $data = ['message'=>'Product created successfully','status'=>true,'error'=>''];
+        return redirect('/ProductPage')->with($data);
+    }//end method
+
+    public function ProductPage(Request $request){
+        $user_id = $request->header('id');
+        $products = Product::where('user_id', $user_id)
+            ->with('category')->latest()->get();
+        return Inertia::render('ProductPage', ['products' => $products]);
+    }//end method
+
+    public function ProductSavePage(Request $request){
+        $user_id = $request->header('id');
+        $product_id = $request->query('id');
+        $product = Product::where('id',$product_id)->where('user_id',$user_id)->first();
+        $categories = Category::where('user_id', $user_id)->get();
+        return Inertia::render('ProductSavePage', ['product' => $product, 'categories' => $categories]);
     }//end method
 
     public function ProductList(Request $request){
@@ -97,10 +116,12 @@ class ProductController extends Controller
 
         $product->save();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Product Updated successfully'
-        ]);
+        // return response()->json([
+        //     'status' => 'success',
+        //     'message' => 'Product Updated successfully'
+        // ]);
+        $data = ['message'=>'Product updated successfully','status'=>true,'error'=>''];
+        return redirect('/ProductPage')->with($data);
     }//end method
 
     public function ProductDelete(Request $request,$id){
@@ -112,15 +133,19 @@ class ProductController extends Controller
             }
 
             $product->delete();
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Product Deleted successfully'
-            ]);
+            // return response()->json([
+            //     'status' => 'success',
+            //     'message' => 'Product Deleted successfully'
+            // ]);
+            $data = ['message'=>'Product Deleted successfully','status'=>true,'error'=>''];
+            return redirect()->back()->with($data);
         }catch(Exception $e){
-            return response()->json([
-                'status' => 'failed',
-                'message' => $e->getMessage()
-            ]);
+            // return response()->json([
+            //     'status' => 'failed',
+            //     'message' => $e->getMessage()
+            // ]);
+            $data = ['message'=> 'Something went wrong','status'=>false,'error'=>$e->getMessage()];
+            return redirect()->back()->with($data);
         }
 
     }//end method

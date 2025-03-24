@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 
@@ -22,11 +23,26 @@ class CustomerController extends Controller
             'mobile' => $request->input('mobile'),
             'user_id' => $user_id
         ]);
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Customer created successfully'
-        ]);
+        // return response()->json([
+        //     'status' => 'success',
+        //     'message' => 'Customer created successfully'
+        // ]);
+        $data = ['message'=>'Customer created successfully','status'=>true,'error'=>''];
+        return redirect('/CustomerPage')->with($data);
     }//end method
+
+    public function CustomerPage(Request $request){
+        $user_id = $request->header('id');
+        $customers = Customer::where('user_id', $user_id)->get();
+        return Inertia::render('CustomerPage', ['customers' => $customers]);
+    }
+
+    public function CustomerSavePage(Request $request){
+        $user_id=$request->header('id');
+        $id=$request->query('id');
+        $customer=Customer::where('id',$id)->where('user_id',$user_id)->first();
+        return Inertia::render('CustomerSavePage',['customer'=>$customer]);
+    }
 
     public function CustomerList(Request $request){
         $user_id = $request->header('id');
@@ -48,18 +64,22 @@ class CustomerController extends Controller
             'email' => $request->input('email'),
             'mobile' => $request->input('mobile'),
         ]);
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Customer Updaetd successfully'
-        ]);
+        // return response()->json([
+        //     'status' => 'success',
+        //     'message' => 'Customer Updaetd successfully'
+        // ]);
+        $data = ['message'=>'Customer updated successfully','status'=>true,'error'=>''];
+        return redirect('/CustomerPage')->with($data);
     }//end method
 
     public function CustomerDelete(Request $request,$id){
         $user_id = $request->header('id');
         Customer::where('user_id', $user_id)->where('id', $id)->delete();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Customer Deleted successfully'
-        ]);
+        // return response()->json([
+        //     'status' => 'success',
+        //     'message' => 'Customer Deleted successfully'
+        // ]);
+        $data = ['message'=>'Customer Deleted successfully','status'=>true,'error'=>''];
+        return redirect('/CustomerPage')->with($data);
     }//end method
 }

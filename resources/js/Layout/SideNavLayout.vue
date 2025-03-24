@@ -37,7 +37,7 @@
                 <span class="side-bar-item-caption">Create Sale</span>
             </Link>
 
-            <Link href="/invoice-list-page" class="side-bar-item">
+            <Link href="/InvoiceListPage" class="side-bar-item">
                 <span class="side-bar-item-icon"><i class="fa fa-file-invoice-dollar text-green" /></span>
                 <span class="side-bar-item-caption">Invoice</span>
             </Link>
