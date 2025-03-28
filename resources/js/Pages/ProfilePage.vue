@@ -1,9 +1,9 @@
 <template>
     <SideNavLayout>
-        <SummaryView/>
+        <ProfileForm/>
     </SideNavLayout>
 </template>
 <script setup>
     import SideNavLayout from '../Layout/SideNavLayout.vue';
-    import SummaryView from '../Components/Dashboard/SummaryView.vue';
+    import ProfileForm from '../Components/User/ProfileForm.vue';
 </script>

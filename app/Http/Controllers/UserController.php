@@ -6,7 +6,11 @@ use Exception;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Mail\OTPMail;
+use App\Models\Invoice;
+use App\Models\Product;
 use App\Helper\JWTToken;
+use App\Models\Category;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -31,9 +35,6 @@ class UserController extends Controller
     public function ResetPasswordPage(Request $request){
         return Inertia::render('ResetPasswordPage');
     }//end method
-
-
-
 
     public function UserRegistration(Request $request){
         try{
@@ -104,14 +105,29 @@ class UserController extends Controller
 
 
     public function DashboardPage(Request $request){
-        // $user = $request->header('email');
-        // return response()->json([
-        //     'status' => 'success',
-        //     'message' => 'User login successfully',
-        //     'user' => $user
-        // ],200);
+        $user_id = request()->header('id');
 
-        return Inertia::render('DashboardPage');
+        $product = Product::where('user_id', $user_id)->count();
+        $category = Category::where('user_id', $user_id)->count();
+        $customer = Customer::where('user_id', $user_id)->count();
+        $invoice = Invoice::where('user_id', $user_id)->count();
+        $total = Invoice::where('user_id', $user_id)->sum('total');
+        $vat = Invoice::where('user_id', $user_id)->sum('vat');
+        $payable = Invoice::where('user_id', $user_id)->sum('payable');
+        $discount = Invoice::where('user_id', $user_id)->sum('discount');
+
+        $data = [
+            'product' => $product,
+            'category' => $category,
+            'customer' => $customer,
+            'invoice' => $invoice,
+            'total' => round($total),
+            'vat' => round($vat),
+            'payable' => round($payable),
+            'discount' => $discount
+        ];
+
+        return Inertia::render('DashboardPage',['list'=>$data]);
     }//end method
 
     public function UserLogout(Request $request){
@@ -217,5 +233,22 @@ class UserController extends Controller
             return redirect('/reset-password')->with($data);
         }
     }//end method
-}
 
+    public function ProfilePage(Request $request){
+        $email = request()->header('email');
+
+        $user = User::where('email', $email)->first();
+        return Inertia::render('ProfilePage',['user'=>$user]);
+    }//end method
+
+    public function UserUpdate(Request $request){
+        $email = request()->header('email');
+        User::where('email', $email)->update([
+            'name' => $request->input('name'),
+            'email'=> $request->input('email'),
+            'mobile'=> $request->input('mobile'),
+        ]);
+        $data = ['message'=> 'Profile update successfully','status'=>true, 'error'=>'' ];
+        return redirect()->back()->with($data);
+    }
+}
