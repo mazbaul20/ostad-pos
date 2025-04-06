@@ -236,7 +236,7 @@ class UserController extends Controller
 
     public function ProfilePage(Request $request){
         $email = request()->header('email');
-
+	//$email = $request->session()->get('email');
         $user = User::where('email', $email)->first();
         return Inertia::render('ProfilePage',['user'=>$user]);
     }//end method
