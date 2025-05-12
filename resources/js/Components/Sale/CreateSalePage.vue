@@ -165,6 +165,7 @@
 <script setup>
 import { useForm,usePage, router } from '@inertiajs/vue3'
 import { createToaster } from "@meforma/vue-toaster";
+import { watch } from "vue";
 const toaster = createToaster();
 import { ref } from "vue";
 
@@ -253,6 +254,10 @@ const removeQty = (id)=>{
 const removeProductFromSale = (index)=>{
     selectedProduct.value.splice(index,1);
     calculateTotal();
+    calculatePayable();
+    removeVat();
+    removeDiscount();
+    toaster.success('Product removed from sale');
 };//end method
 
 const vatRate = ref(5);
@@ -297,6 +302,14 @@ const calculatePayable = () =>{
     const totalAmount = calculateTotal();
     payable.value = totalAmount + vatAmount.value - discountAmount.value;
 }//end method
+
+watch(
+  [selectedProduct, vatAmount, discountAmount],
+  () => {
+    calculatePayable();
+  },
+  { deep: true }
+);
 
 const payable = ref(0);
 
